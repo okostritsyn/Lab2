@@ -17,12 +17,26 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @RequestMapping("/")
+    @RequestMapping("/test")
     public ModelAndView home() {
         List<Student> listStudents = studentService.listAll();
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("listStudents", listStudents);
         return mav;
+    }
+
+    @RequestMapping("/")
+    public ModelAndView home2() {
+        List<Student> listStudents = studentService.listAll();
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("listStudents", listStudents);
+        return mav;
+    }
+
+    @RequestMapping( value = "/custom", method = RequestMethod.GET)
+    public List<Student> home1() {
+        List<Student> listStudents = studentService.listAll();
+        return listStudents;
     }
 
     @RequestMapping("/new")

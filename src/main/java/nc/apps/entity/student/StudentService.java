@@ -2,6 +2,8 @@ package nc.apps.entity.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +32,6 @@ public class StudentService {
     }
 
     public List<Student> search(String keyword) {
-
-        return null;
+        return new ArrayList<Student>();
     }
 }
