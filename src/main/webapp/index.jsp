@@ -1,43 +1,120 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01
-Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Student Manager</title>
-</head>
-<body>
-<div align="center">
-    <h2>Student Manager</h2>
-    <form method="get" action="search">
-        <input type="text" name="keyword" />
-        <input type="submit" value="Search" />
-    </form>
-    <h3><a href="/new">New Student</a></h3>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Group</th>
-            <th>Action</th>
-        </tr>
-        <c:forEach items="${listStudents}" var="student">
-            <tr>
-                <td>${student.id}</td>
-                <td>${student.name}</td>
-                <td>${student.age}</td>
-                <td>${student.group}</td>
-                <td>
-                    <a href="/edit?id=${student.id}">Edit</a>
+  <title>Students Home Page</title>
 
-                    <a href="/delete?id=${student.id}">Delete</a>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+<body onload="loadStudents();">
+
+<h2>Students table</h2>
+
+<span>
+  <a href="web/subjects/viewAll">View subjects</a>
+  <a href="web/groups/viewAll">View groups</a>
+  <a href="web/spec/viewAll">View specializations</a>
+</span>
+
+<div>
+  <p></p>
+  <input id="search_field">
+  <button onclick="searchByName()">Search by name</button>
+  <p></p>
 </div>
+
+<table id="studentsList">
+
+</table>
+
+<div>
+  <p><a href="web/students/new">Add student</a></p>
+</div>
+
+<script>
+  function searchByName() {
+    var name = document.getElementById("search_field").value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        showStudentsFromJSON(this.responseText);
+      }
+    };
+    xhttp.open("GET", "http://localhost:8080/api/students/findByName?name=" + name, true);
+    xhttp.send();
+  }
+
+  function showStudentsFromJSON(responseText){
+    var students = JSON.parse(responseText);
+    var html = '<tr>\n' +
+            '        <th>id</th>\n' +
+            '        <th>Name</th>\n' +
+            '        <th>Age</th>\n' +
+            '        <th>Group</th>\n' +
+            '        <th>Avg. mark</th>\n' +
+            '        <th> </th>\n' +
+            '    </tr>';
+    for (var i = 0; i < students.length; i++) {
+      var student = students[i];
+      html = html + '<tr><td><a href="web/students/edit/'+student.id+'">' + student.id + '</a></td>\n' +
+              '        <td><a href="web/students/edit/'+student.id+'">' + student.name + '</a></td>\n' +
+              '        <td>' + student.age + '</td>\n' +
+              '        <td><a href="web/groups/edit/'+student.groupid+'">' + student.group + '</a></td>' +
+              '        <td><a href="web/marks/viewmarks/'+student.id+'">' + student.avgMark + '</a></td>' +
+              '        <td><button onclick="deleteStudent(' + student.id + ')">Delete</button></td></tr>';
+
+    }
+    document.getElementById("studentsList").innerHTML = html;
+  }
+
+  function deleteStudent(studentId) {
+    if (confirm('Do you really want to delete?') === false) {
+      return;
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
+        loadStudents();
+      } else {
+        console.log('err', this.responseText)
+      }
+    };
+    xhttp.open("DELETE", "http://localhost:8080/api/students/delete/" + studentId, true);
+    xhttp.send();
+  }
+
+  function loadStudents() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        showStudentsFromJSON(this.responseText);
+      }
+    };
+    xhttp.open("GET", "http://localhost:8080/api/students/findAll", true);
+    xhttp.send();
+  }
+</script>
 </body>
 </html>

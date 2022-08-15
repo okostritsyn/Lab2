@@ -1,15 +1,18 @@
-package nc.apps.entity.student;
+package nc.apps.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import nc.apps.model.Student;
+import nc.apps.dao.StudentDAO;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StudentService {
-    @Autowired
-    private StudentDAO studentDAO;
+
+    private final StudentDAO studentDAO;
+
+    public StudentService(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
+    }
 
     public void save(Student student) {
         if (student.isNew()) {
@@ -32,6 +35,6 @@ public class StudentService {
     }
 
     public List<Student> search(String keyword) {
-        return new ArrayList<Student>();
+        return studentDAO.findByName(keyword);
     }
 }

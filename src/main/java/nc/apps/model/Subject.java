@@ -1,8 +1,9 @@
-package nc.apps.entity.group;
+package nc.apps.model;
 
-public class Group {
+import java.io.Serializable;
+
+public class Subject implements Serializable {
     private Long id;
-
     private String name;
 
     public Long getId() {
@@ -21,11 +22,15 @@ public class Group {
         this.name = name;
     }
 
-    public Group() {
+    public Subject() {
     }
 
-    public Group(Long id, String name) {
+    public Subject(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public boolean isNew() {
+        return this.getId()==null || this.getId() == 0;
     }
 }

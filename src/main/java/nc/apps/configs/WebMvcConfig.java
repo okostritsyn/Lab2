@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebMvc
 @ComponentScan("nc.apps")
@@ -29,13 +31,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public JdbcTemplate getJdbcTemplate() throws ClassNotFoundException {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        return jdbcTemplate;
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));;
+        return dataSource;
     }
 }

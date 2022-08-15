@@ -1,25 +1,26 @@
-package nc.apps.entity.student;
+package nc.apps.model;
 
-import nc.apps.entity.group.Group;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Student {
+public class Student implements Serializable {
     private Long id;
     private String name;
     private int age;
     private long groupid;
-    private Group group;
+    private String group;
+    private double avgMark;
 
-    public Group getGroup() {
+    public String getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(String group) {
         this.group = group;
     }
 
     public boolean isNew() {
-        return this.getId()>0;
+        return this.getId()==null || this.getId() == 0;
     }
 
     protected Student(String name, int age, long groupid) {
@@ -28,7 +29,7 @@ public class Student {
         this.groupid = groupid;
     }
 
-    protected Student() {
+    public Student() {
 
     }
 
@@ -61,6 +62,14 @@ public class Student {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getAvgMark() {
+        return avgMark;
+    }
+
+    public void setAvgMark(Double avgMark) {
+        this.avgMark = avgMark;
     }
 
     public String getName() {
