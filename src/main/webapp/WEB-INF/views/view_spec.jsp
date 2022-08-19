@@ -42,6 +42,7 @@
 </div>
 
 <p>Specializations tree:</p>
+
 <div id="jstree">
 
 </div>
@@ -49,7 +50,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 <script>
-  loadTree();
   function searchByName() {
     var name = document.getElementById("search_field").value;
     var xhttp = new XMLHttpRequest();
@@ -87,9 +87,12 @@
     var objects = JSON.parse(responseText);
     for (var i = 0; i < objects.length; i++) {
       var obj = objects[i];
-      tree.core.data.push(obj);
+      var currData = { 'id' : "",'parent' : "",'text' : "" };
+      currData.id = String(obj.id);
+      currData.parent = obj.parentId ===0 ? "#" : String(obj.parentId);
+      currData.text = obj.name;
+      tree.core.data.push(currData);
     }
-    var jsonData = JSON.stringify(tree);
     $('#jstree').jstree(tree);
   }
 
@@ -119,20 +122,10 @@
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         showListFromJSON(this.responseText);
-      }
-    };
-    xhttp.open("GET", "http://localhost:8080/api/spec/findAll", true);
-    xhttp.send();
-  }
-
-  function loadTree() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
         showTreeFromJSON(this.responseText);
       }
     };
-    xhttp.open("GET", "http://localhost:8080/api/spec/findAllAsTree", true);
+    xhttp.open("GET", "http://localhost:8080/api/spec/findAll", true);
     xhttp.send();
   }
 </script>

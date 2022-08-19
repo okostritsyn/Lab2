@@ -1,7 +1,6 @@
 package nc.apps.controllers.rest;
 
 import nc.apps.model.Specialization;
-import nc.apps.model.SpecializationNode;
 import nc.apps.service.SpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,12 +20,6 @@ public class SpecRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Specialization> findAll() {
         return specService.listAll();
-    }
-
-    @RequestMapping(value = "/findAllAsTree",method=RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<SpecializationNode> findAllAsTree() {
-        return specService.listAllAsTree();
     }
 
     @GetMapping("/findById")

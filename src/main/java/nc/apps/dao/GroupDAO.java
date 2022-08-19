@@ -3,6 +3,7 @@ package nc.apps.dao;
 import nc.apps.mapper.GroupMapper;
 import nc.apps.model.Group;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +47,11 @@ public class GroupDAO {
     }
 
     public Group findById(long id) {
-        return jdbcTemplate.queryForObject(SQL_FIND_GROUP.replaceAll("ident from groups",SQL_JOIN_GROUP),  new GroupMapper(), id);
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_GROUP.replaceAll("ident from groups", SQL_JOIN_GROUP), new GroupMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public boolean delete(Group group) {

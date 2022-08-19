@@ -2,10 +2,8 @@ package nc.apps.service;
 
 import nc.apps.dao.SpecDAO;
 import nc.apps.model.Specialization;
-import nc.apps.model.SpecializationNode;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -41,7 +39,4 @@ public class SpecService {
         return specDAO.findByName(keyword);
     }
 
-    public List<SpecializationNode> listAllAsTree() {
-        return specDAO.findAllAsTree();
-    }
 }

@@ -28,9 +28,9 @@ public class GroupController {
     @GetMapping(path = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Group group = groupService.get(Long.parseLong(idPath));
-        if (group == null) {
-            return new ModelAndView("redirect:/");
-        }
+
+        if (group == null) throw new GroupNotFoundException(idPath);
+
         return new ModelAndView("edit_group", "group",group);
     }
 

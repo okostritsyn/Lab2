@@ -1,9 +1,7 @@
 package nc.apps.dao;
 
 import nc.apps.mapper.SpecMapper;
-import nc.apps.mapper.SpecNodeMapper;
 import nc.apps.model.Specialization;
-import nc.apps.model.SpecializationNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,6 +33,10 @@ public class SpecDAO {
             "    left join\n" +
             "    specializations specparent on specializations.parentid = specparent.id\n";
 
+    public List<Specialization> findAll() {
+        return jdbcTemplate.query(SQL_GET_ALL.replaceAll("ident from specializations",SQL_JOIN_GROUP), new SpecMapper());
+    }
+
     public boolean update(Specialization spec) {
         return jdbcTemplate.update(SQL_UPDATE, spec.getName(),spec.getParentId(),
                 spec.getId()) > 0;
@@ -43,9 +45,6 @@ public class SpecDAO {
     public boolean create(Specialization spec) {
         return jdbcTemplate.update(SQL_INSERT, spec.getName(),spec.getParentId()) > 0;    }
 
-    public List<Specialization> findAll() {
-        return jdbcTemplate.query(SQL_GET_ALL.replaceAll("ident from specializations",SQL_JOIN_GROUP), new SpecMapper());
-    }
 
     public Specialization findById(long id) {
         return jdbcTemplate.queryForObject(SQL_FIND.replaceAll("ident from specializations",SQL_JOIN_GROUP),  new SpecMapper(), id);
@@ -57,9 +56,5 @@ public class SpecDAO {
 
     public List<Specialization> findByName(String name) {
         return jdbcTemplate.query(SQL_FIND_NAME.replaceAll("ident from specializations",SQL_JOIN_GROUP), new SpecMapper(),name);
-    }
-
-    public List<SpecializationNode> findAllAsTree() {
-        return jdbcTemplate.query(SQL_GET_ALL.replaceAll("ident from specializations",SQL_JOIN_GROUP), new SpecNodeMapper());
     }
 }
