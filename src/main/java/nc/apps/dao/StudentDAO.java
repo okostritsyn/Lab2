@@ -5,13 +5,11 @@ import nc.apps.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-@Transactional
 public class StudentDAO {
     JdbcTemplate jdbcTemplate;
 
@@ -20,11 +18,11 @@ public class StudentDAO {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private final String SQL_FIND_STUDENT_NAME = "select ident from students where students.name LIKE '%' || ? || '%'";
+    private final String SQL_FIND_STUDENT_NAME = "select ident from students where students.name LIKE '%' || ? || '%' ORDER BY students.name";
     private final String SQL_FIND_STUDENT = "select ident from students where students.id = ?";
     private final String SQL_DELETE_STUDENT = "delete from students where id = ?";
     private final String SQL_UPDATE_STUDENT = "update students set name = ?, age = ?, groupid  = ? where id = ?";
-    private final String SQL_GET_ALL = "select ident from students";
+    private final String SQL_GET_ALL = "select ident from students ORDER BY students.name";
     private final String SQL_INSERT_STUDENT = "insert into students(name, age, groupid) values(?,?,?)";
 
     private final String SQL_JOIN_GROUP = "students.*, " +

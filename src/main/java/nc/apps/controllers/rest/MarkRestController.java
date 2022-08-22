@@ -1,5 +1,6 @@
 package nc.apps.controllers.rest;
 
+import lombok.extern.log4j.Log4j;
 import nc.apps.model.Mark;
 import nc.apps.service.MarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/marks")
+@Log4j
 public class MarkRestController {
 
     @Autowired
     private MarkService markService;
 
-    @RequestMapping(value = "/findByStudent/{studentId}",method=RequestMethod.GET,
+    @GetMapping(value = "/findByStudent/{studentId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Mark> findByStudent(@PathVariable int studentId) {
         return markService.listByStudent((long) studentId);
@@ -28,15 +30,23 @@ public class MarkRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        markService.delete((long) id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity delete(@PathVariable int id) {
+        boolean status =  markService.delete((long) id);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while deleting mark");
+        return ResponseEntity.internalServerError().build();
     }
 
-    @RequestMapping(value = "/save",method=RequestMethod.POST,
+    @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> save(@RequestBody Mark mark) {
-        markService.save(mark);
-        return ResponseEntity.ok().build();
+    public ResponseEntity save(@RequestBody Mark mark) {
+        boolean status = markService.save(mark);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while saving mark");
+        return ResponseEntity.internalServerError().build();
     }
 }

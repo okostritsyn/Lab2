@@ -15,11 +15,11 @@ public class SpecService {
         this.specDAO = specDAO;
     }
 
-    public void save(Specialization spec) {
+    public boolean save(Specialization spec) {
         if (spec.isNew()) {
-            specDAO.create(spec);
+            return specDAO.create(spec);
         } else {
-            specDAO.update(spec);
+            return specDAO.update(spec);
         }
     }
 
@@ -31,8 +31,8 @@ public class SpecService {
         return specDAO.findById(id);
     }
 
-    public void delete(Long id) {
-        specDAO.delete(specDAO.findById(id));
+    public boolean delete(Long id) {
+        return specDAO.delete(specDAO.findById(id));
     }
 
     public List<Specialization> search(String keyword) {

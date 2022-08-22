@@ -1,5 +1,6 @@
 package nc.apps.controllers.web;
 
+import nc.apps.errors.GroupNotFoundException;
 import nc.apps.model.Group;
 import nc.apps.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;

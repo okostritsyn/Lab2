@@ -1,4 +1,4 @@
-package nc.apps.controllers.web;
+package nc.apps.errors;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,12 +17,18 @@ class ErrorController {
         // the framework handle it - like the OrderNotFoundException example
         // at the start of this post.
         // AnnotationUtils is a Spring Framework utility class.
-        if (AnnotationUtils.findAnnotation
-                (e.getClass(), ResponseStatus.class) != null)
-            throw e;
+        ResponseStatus annotation = AnnotationUtils.findAnnotation
+                (e.getClass(), ResponseStatus.class);
+
+        // (AnnotationUtils.findAnnotation
+        //        (e.getClass(), ResponseStatus.class) != null)
+        //    throw e;
 
         // Otherwise setup and send the user to a default error-view.
         ModelAndView model = new ModelAndView();
+        model.addObject("code", annotation != null?annotation.code():"500 SERVER ERROR");
+        model.addObject("reason", annotation != null?annotation.reason():"");
+
         model.addObject("exception", e);
         model.addObject("url", req.getRequestURL());
         model.setViewName("error_page");

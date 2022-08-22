@@ -15,11 +15,11 @@ public class GroupService {
         this.groupDAO = groupDAO;
     }
 
-    public void save(Group group) {
+    public boolean save(Group group) {
         if (group.isNew()) {
-            groupDAO.create(group);
+            return groupDAO.create(group);
         } else {
-            groupDAO.update(group);
+            return groupDAO.update(group);
         }
     }
 
@@ -31,11 +31,15 @@ public class GroupService {
         return groupDAO.findById(id);
     }
 
-    public void delete(Long id) {
-        groupDAO.delete(groupDAO.findById(id));
+    public boolean delete(Long id) {
+        return groupDAO.delete(groupDAO.findById(id));
     }
 
     public List<Group> search(String keyword) {
         return groupDAO.findByName(keyword);
+    }
+
+    public boolean canBeDeleted(long id) {
+        return false;
     }
 }

@@ -15,11 +15,11 @@ public class SubjectService {
         this.subjectDAO = subjectDAO;
     }
 
-    public void save(Subject subject) {
+    public boolean save(Subject subject) {
         if (subject.isNew()) {
-            subjectDAO.create(subject);
+            return subjectDAO.create(subject);
         } else {
-            subjectDAO.update(subject);
+            return subjectDAO.update(subject);
         }
     }
 
@@ -31,8 +31,8 @@ public class SubjectService {
         return subjectDAO.findById(id);
     }
 
-    public void delete(Long id) {
-        subjectDAO.delete(subjectDAO.findById(id));
+    public boolean delete(Long id) {
+        return subjectDAO.delete(subjectDAO.findById(id));
     }
 
     public List<Subject> search(String keyword) {

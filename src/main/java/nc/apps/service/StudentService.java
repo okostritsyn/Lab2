@@ -14,11 +14,11 @@ public class StudentService {
         this.studentDAO = studentDAO;
     }
 
-    public void save(Student student) {
+    public boolean save(Student student) {
         if (student.isNew()) {
-            studentDAO.create(student);
+            return studentDAO.create(student);
         } else {
-            studentDAO.update(student);
+            return studentDAO.update(student);
         }
     }
 
@@ -30,8 +30,8 @@ public class StudentService {
         return studentDAO.findById(id);
     }
 
-    public void delete(Long id) {
-        studentDAO.delete(studentDAO.findById(id));
+    public boolean delete(Long id) {
+        return studentDAO.delete(studentDAO.findById(id));
     }
 
     public List<Student> search(String keyword) {

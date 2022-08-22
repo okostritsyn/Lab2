@@ -1,5 +1,6 @@
 package nc.apps.controllers.rest;
 
+import lombok.extern.log4j.Log4j;
 import nc.apps.model.Student;
 import nc.apps.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
+@Log4j
 public class StudentRestController {
 
     @Autowired
     private StudentService studentService;
 
-    @RequestMapping(value = "/findAll",method=RequestMethod.GET,
+    @GetMapping(value = "/findAll",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Student> findAll() {
         return studentService.listAll();
@@ -28,16 +30,24 @@ public class StudentRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        studentService.delete((long) id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity delete(@PathVariable int id) {
+        boolean status = studentService.delete((long) id);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while deleting student");
+        return ResponseEntity.internalServerError().build();
     }
 
-    @RequestMapping(value = "/save",method=RequestMethod.POST,
+    @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> save(@RequestBody Student student) {
-        studentService.save(student);
-        return ResponseEntity.ok().build();
+    public ResponseEntity save(@RequestBody Student student) {
+        boolean status = studentService.save(student);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while saving student");
+        return ResponseEntity.internalServerError().build();
     }
 
     @GetMapping("/findByName")

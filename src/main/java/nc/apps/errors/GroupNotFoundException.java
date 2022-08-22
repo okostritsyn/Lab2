@@ -1,4 +1,4 @@
-package nc.apps.controllers.web;
+package nc.apps.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

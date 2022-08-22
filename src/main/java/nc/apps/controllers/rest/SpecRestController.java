@@ -1,5 +1,6 @@
 package nc.apps.controllers.rest;
 
+import lombok.extern.log4j.Log4j;
 import nc.apps.model.Specialization;
 import nc.apps.service.SpecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/spec")
+@Log4j
 public class SpecRestController {
 
     @Autowired
     private SpecService specService;
 
-    @RequestMapping(value = "/findAll",method=RequestMethod.GET,
+    @GetMapping(value = "/findAll",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Specialization> findAll() {
         return specService.listAll();
@@ -28,16 +30,24 @@ public class SpecRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        specService.delete((long) id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity delete(@PathVariable int id) {
+        boolean status = specService.delete((long) id);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while deleting spec");
+        return ResponseEntity.internalServerError().build();
     }
 
-    @RequestMapping(value = "/save",method=RequestMethod.POST,
+    @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> save(@RequestBody Specialization spec) {
-        specService.save(spec);
-        return ResponseEntity.ok().build();
+    public ResponseEntity save(@RequestBody Specialization spec) {
+        boolean status = specService.save(spec);
+        if(status){
+            return ResponseEntity.ok().build();
+        }
+        log.error("Error while saving spec");
+        return ResponseEntity.internalServerError().build();
     }
 
     @GetMapping("/findByName")

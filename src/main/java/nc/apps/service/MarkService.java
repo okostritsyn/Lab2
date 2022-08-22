@@ -15,11 +15,11 @@ public class MarkService {
         this.markDAO = markDAO;
     }
 
-    public void save(Mark mark) {
+    public boolean save(Mark mark) {
         if (mark.isNew()) {
-            markDAO.create(mark);
+           return markDAO.create(mark);
         } else {
-            markDAO.update(mark);
+            return markDAO.update(mark);
         }
     }
 
@@ -31,8 +31,8 @@ public class MarkService {
         return markDAO.findById(id);
     }
 
-    public void delete(Long id) {
-        markDAO.delete(markDAO.findById(id));
+    public boolean delete(Long id) {
+        return markDAO.delete(markDAO.findById(id));
     }
 
 }

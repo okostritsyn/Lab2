@@ -1,19 +1,15 @@
 package nc.apps.dao;
 
-import nc.apps.mapper.GroupMapper;
 import nc.apps.mapper.SubjectMapper;
-import nc.apps.model.Group;
 import nc.apps.model.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-@Transactional
 public class SubjectDAO {
     JdbcTemplate jdbcTemplate;
 
