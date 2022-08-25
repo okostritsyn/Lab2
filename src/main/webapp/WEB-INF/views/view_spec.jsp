@@ -54,8 +54,15 @@
     var name = document.getElementById("search_field").value;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
         showListFromJSON(this.responseText);
+      } else {
+        alert(this.responseText);
+        console.log('err', this.responseText)
       }
     };
     xhttp.open("GET", "http://localhost:8080/api/spec/findByName?name=" + name, true);
@@ -110,6 +117,7 @@
       if (this.status == 200) {
         loadList();
       } else {
+        alert(this.responseText);
         console.log('err', this.responseText)
       }
     };
@@ -120,9 +128,16 @@
   function loadList() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
         showListFromJSON(this.responseText);
         showTreeFromJSON(this.responseText);
+      } else {
+        alert(this.responseText);
+        console.log('err', this.responseText)
       }
     };
     xhttp.open("GET", "http://localhost:8080/api/spec/findAll", true);

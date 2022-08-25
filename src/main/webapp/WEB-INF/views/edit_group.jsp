@@ -62,6 +62,7 @@
             if (this.status == 200) {
 
             } else {
+                alert(this.responseText);
                 console.log('err', this.responseText)
             }
         };

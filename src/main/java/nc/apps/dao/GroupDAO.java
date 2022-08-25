@@ -1,8 +1,10 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
+import nc.apps.controllers.rest.GroupRestController;
 import nc.apps.mapper.GroupMapper;
 import nc.apps.model.Group;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,11 +30,15 @@ public class GroupDAO {
     private final String SQL_INSERT_GROUP = "insert into groups(name,specid) values(?,?)";
     private final String SQL_FIND_GROUP_NAME = "select ident from groups where groups.name LIKE '%' || ? || '%'";
 
+    private final String SQL_CAN_DELETE = "select ident from groups " +
+            " inner join students on groups.id = students.groupid" +
+            " where groups.id =?";
+
     private final String SQL_JOIN_GROUP = "groups.*, " +
             "specializations.name as specname" +
-            " from groups\n" +
-            "    left join\n" +
-            "    specializations on groups.specid = specializations.id\n";
+            " from groups" +
+            "    left join" +
+            "    specializations on groups.specid = specializations.id ";
 
     public boolean update(Group group) {
         log.info(SQL_UPDATE_GROUP);
@@ -54,7 +60,6 @@ public class GroupDAO {
             log.info(SQL_FIND_GROUP.replaceAll("ident from groups", SQL_JOIN_GROUP));
             return jdbcTemplate.queryForObject(SQL_FIND_GROUP.replaceAll("ident from groups", SQL_JOIN_GROUP), new GroupMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            log.error("Group by id "+id+" not found");
             return null;
         }
     }
@@ -69,4 +74,9 @@ public class GroupDAO {
         return jdbcTemplate.query(SQL_FIND_GROUP_NAME.replaceAll("ident from groups",SQL_JOIN_GROUP), new GroupMapper(),name);
     }
 
+    public boolean canBeDeleted(long id) {
+        log.info(SQL_CAN_DELETE.replaceAll("ident from groups",SQL_JOIN_GROUP));
+        List<Group> currList = jdbcTemplate.query(SQL_CAN_DELETE.replaceAll("ident from groups",SQL_JOIN_GROUP), new GroupMapper(), id);
+        return currList.size() == 0;
+    }
 }

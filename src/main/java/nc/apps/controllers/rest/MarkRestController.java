@@ -1,9 +1,12 @@
 package nc.apps.controllers.rest;
 
 import lombok.extern.log4j.Log4j;
+import nc.apps.errors.AppError;
 import nc.apps.model.Mark;
 import nc.apps.service.MarkService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/marks")
 @Log4j
 public class MarkRestController {
-
     @Autowired
     private MarkService markService;
 
@@ -31,12 +33,15 @@ public class MarkRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable int id) {
-        boolean status =  markService.delete((long) id);
-        if(status){
-            return ResponseEntity.ok().build();
+        if (markService.canBeDeleted((long) id)){
+            if(markService.delete((long) id)){
+                return ResponseEntity.ok().build();
+            }
         }
-        log.error("Error while deleting mark");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while deleting mark with id "+id);
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "mark with id " + id + " can not be deleted"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/save",
@@ -46,7 +51,9 @@ public class MarkRestController {
         if(status){
             return ResponseEntity.ok().build();
         }
-        log.error("Error while saving mark");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while saving mark with id "+mark.getId());
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "mark with id " + mark.getId() + " can not be saved"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

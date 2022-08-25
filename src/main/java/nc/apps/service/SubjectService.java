@@ -38,4 +38,8 @@ public class SubjectService {
     public List<Subject> search(String keyword) {
         return subjectDAO.findByName(keyword);
     }
+
+    public boolean canBeDeleted(Long id) {
+        return subjectDAO.canBeDeleted(id);
+    }
 }

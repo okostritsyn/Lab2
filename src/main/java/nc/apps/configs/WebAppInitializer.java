@@ -1,43 +1,32 @@
 package nc.apps.configs;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
+
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitializer implements WebApplicationInitializer  {
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
+
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.register(WebMvcConfig.class);
-        //appContext.setServletContext(servletContext);
+        appContext.setServletContext(servletContext);
 
+        // IMPORTANT!!
+        appContext.scan("nc.apps");
         servletContext.addListener(new ContextLoaderListener(appContext));
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
                 "dispatcher", new DispatcherServlet(appContext));
 
-        //dispatcher.setLoadOnStartup(1);
+        dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
-    }
 
-    @Override
-    protected String[] getServletMappings() {
-        return new String[0];
-    }
-
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class[0];
-    }
-
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class[0];
-    }
+        // IMPORTANT!!
+        dispatcher.setInitParameter("contextClass", appContext.getClass().getName());
+      }
 }

@@ -1,5 +1,6 @@
 package nc.apps.controllers.web;
 
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.model.Specialization;
 import nc.apps.service.SpecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class SpecController {
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Specialization spec = specService.get(Long.parseLong(idPath));
         if (spec == null) {
-            return new ModelAndView("redirect:/");
+            throw new ResourceNotFoundException("Specification with id "+idPath+" not found");
         }
         return new ModelAndView("edit_spec", "spec",spec);
     }

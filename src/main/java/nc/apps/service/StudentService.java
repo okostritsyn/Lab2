@@ -1,5 +1,7 @@
 package nc.apps.service;
 
+import nc.apps.errors.ResourceNotFoundException;
+import nc.apps.model.Group;
 import nc.apps.model.Student;
 import nc.apps.dao.StudentDAO;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,11 @@ public class StudentService {
     }
 
     public Student get(Long id) {
-        return studentDAO.findById(id);
+        Student currStudent = studentDAO.findById(id);
+        if (currStudent == null){
+            throw new ResourceNotFoundException("Student with id " + id + " not found");
+        }
+        return currStudent;
     }
 
     public boolean delete(Long id) {
@@ -36,5 +42,9 @@ public class StudentService {
 
     public List<Student> search(String keyword) {
         return studentDAO.findByName(keyword);
+    }
+
+    public boolean canBeDeleted(Long id) {
+        return studentDAO.canBeDeleted(id);
     }
 }

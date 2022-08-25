@@ -1,5 +1,6 @@
 package nc.apps.controllers.web;
 
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.model.Student;
 import nc.apps.model.Subject;
 import nc.apps.service.StudentService;
@@ -33,7 +34,7 @@ public class SubjectController {
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Subject subject = subjectService.get(Long.parseLong(idPath));
        if (subject == null) {
-           return new ModelAndView("redirect:/");
+           throw new ResourceNotFoundException("Subject with id "+idPath+" not found");
         }
        return new ModelAndView("edit_subject", "subject", subject);
     }

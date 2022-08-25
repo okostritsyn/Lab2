@@ -39,4 +39,7 @@ public class SpecService {
         return specDAO.findByName(keyword);
     }
 
+    public boolean canBeDeleted(Long id) {
+        return specDAO.canBeDeleted(id);
+    }
 }

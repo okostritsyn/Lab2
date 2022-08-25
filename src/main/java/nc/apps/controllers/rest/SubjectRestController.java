@@ -1,9 +1,12 @@
 package nc.apps.controllers.rest;
 
 import lombok.extern.log4j.Log4j;
+import nc.apps.errors.AppError;
 import nc.apps.model.Subject;
 import nc.apps.service.SubjectService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/subjects")
 @Log4j
 public class SubjectRestController {
-
     @Autowired
     private SubjectService subjectService;
 
@@ -31,12 +33,15 @@ public class SubjectRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable int id) {
-        boolean status = subjectService.delete((long) id);
-        if(status){
-            return ResponseEntity.ok().build();
+        if (subjectService.canBeDeleted((long) id)){
+            if(subjectService.delete((long) id)){
+                return ResponseEntity.ok().build();
+            }
         }
-        log.error("Error while deleting subjects");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while deleting subject with id "+id);
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "subject with id " + id + " can not be deleted"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/save",
@@ -46,8 +51,10 @@ public class SubjectRestController {
         if(status){
             return ResponseEntity.ok().build();
         }
-        log.error("Error while saving subjects");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while saving subject with id "+subject.getId());
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "subject with id " + subject.getId() + " can not be saved"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/findByName")

@@ -1,5 +1,6 @@
 package nc.apps.controllers.web;
 
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.model.Group;
 import nc.apps.model.Mark;
 import nc.apps.service.GroupService;
@@ -39,7 +40,7 @@ public class MarkController {
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Mark mark = markService.get(Long.parseLong(idPath));
         if (mark == null) {
-            return new ModelAndView("redirect:/");
+            throw new ResourceNotFoundException("Mark with id "+idPath+" not found");
         }
         return new ModelAndView("edit_marks", "mark",mark);
     }

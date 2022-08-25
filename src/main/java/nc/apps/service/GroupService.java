@@ -3,7 +3,6 @@ package nc.apps.service;
 import nc.apps.dao.GroupDAO;
 import nc.apps.model.Group;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -28,8 +27,8 @@ public class GroupService {
     }
 
     public Group get(Long id) {
-        return groupDAO.findById(id);
-    }
+       return groupDAO.findById(id);
+     }
 
     public boolean delete(Long id) {
         return groupDAO.delete(groupDAO.findById(id));
@@ -39,7 +38,7 @@ public class GroupService {
         return groupDAO.findByName(keyword);
     }
 
-    public boolean canBeDeleted(long id) {
-        return false;
+    public boolean canBeDeleted(Long id) {
+        return groupDAO.canBeDeleted(id);
     }
 }

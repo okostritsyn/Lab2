@@ -1,11 +1,14 @@
 package nc.apps.controllers.rest;
 
 import lombok.extern.log4j.Log4j;
+import nc.apps.errors.AppError;
 import nc.apps.model.Group;
 import nc.apps.model.Student;
 import nc.apps.service.GroupService;
 import nc.apps.service.StudentService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,6 @@ import java.util.List;
 @RequestMapping("/api/groups")
 @Log4j
 public class GroupRestController {
-
     @Autowired
     private GroupService groupService;
 
@@ -38,8 +40,11 @@ public class GroupRestController {
                 return ResponseEntity.ok().build();
             }
         }
-        log.error("Error while deleting group");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while deleting group id "+id);
+
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "group with id " + id + " can not be deleted"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/save",
@@ -49,8 +54,10 @@ public class GroupRestController {
         if(status){
             return ResponseEntity.ok().build();
         }
-        log.error("Error while saving group");
-        return ResponseEntity.internalServerError().build();
+        log.error("Error while saving group id "+group.getId());
+        return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "group with id " + group.getId() + " can not be saved"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/findByName")

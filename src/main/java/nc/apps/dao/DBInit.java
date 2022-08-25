@@ -1,5 +1,6 @@
 package nc.apps.dao;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Component
+@Log4j
 public class DBInit {
     JdbcTemplate jdbcTemplate;
 
@@ -43,10 +45,15 @@ public class DBInit {
 
     @PostConstruct
     void postConstruct(){
+        log.info(SQL_INIT_SUBJECTS);
         jdbcTemplate.update(SQL_INIT_SUBJECTS);
+        log.info(SQL_INIT_SPECS);
         jdbcTemplate.update(SQL_INIT_SPECS);
+        log.info(SQL_INIT_GROUPS);
         jdbcTemplate.update(SQL_INIT_GROUPS);
+        log.info(SQL_INIT_STUDENTS);
         jdbcTemplate.update(SQL_INIT_STUDENTS);
+        log.info(SQL_INIT_MARKS);
         jdbcTemplate.update(SQL_INIT_MARKS);
     }
 }

@@ -35,4 +35,7 @@ public class MarkService {
         return markDAO.delete(markDAO.findById(id));
     }
 
+    public boolean canBeDeleted(Long id) {
+        return markDAO.canBeDeleted(id);
+    }
 }
