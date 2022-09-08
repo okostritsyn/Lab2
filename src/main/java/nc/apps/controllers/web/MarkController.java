@@ -1,9 +1,6 @@
 package nc.apps.controllers.web;
 
-import nc.apps.errors.ResourceNotFoundException;
-import nc.apps.model.Group;
 import nc.apps.model.Mark;
-import nc.apps.service.GroupService;
 import nc.apps.service.MarkService;
 import nc.apps.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -39,9 +35,6 @@ public class MarkController {
     @GetMapping(path = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Mark mark = markService.get(Long.parseLong(idPath));
-        if (mark == null) {
-            throw new ResourceNotFoundException("Mark with id "+idPath+" not found");
-        }
         return new ModelAndView("edit_marks", "mark",mark);
     }
 

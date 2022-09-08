@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import nc.apps.errors.AppError;
 import nc.apps.model.Subject;
 import nc.apps.service.SubjectService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,8 +46,7 @@ public class SubjectRestController {
     @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity save(@RequestBody Subject subject) {
-        boolean status = subjectService.save(subject);
-        if(status){
+        if(subjectService.save(subject)){
             return ResponseEntity.ok().build();
         }
         log.error("Error while saving subject with id "+subject.getId());

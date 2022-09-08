@@ -3,7 +3,6 @@ package nc.apps.service;
 import nc.apps.dao.SubjectDAO;
 import nc.apps.model.Subject;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

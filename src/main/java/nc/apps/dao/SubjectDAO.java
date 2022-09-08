@@ -1,10 +1,8 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
-import nc.apps.mapper.GroupMapper;
-import nc.apps.mapper.SpecMapper;
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.mapper.SubjectMapper;
-import nc.apps.model.Group;
 import nc.apps.model.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -56,7 +54,7 @@ public class SubjectDAO {
         try {
             return jdbcTemplate.queryForObject(SQL_FIND, new SubjectMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new ResourceNotFoundException("Mark with id " + id + " not found",e);
         }
     }
 

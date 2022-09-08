@@ -1,9 +1,8 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
-import nc.apps.mapper.GroupMapper;
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.mapper.MarkMapper;
-import nc.apps.model.Group;
 import nc.apps.model.Mark;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -60,7 +59,7 @@ public class MarkDAO {
         try {
             return jdbcTemplate.queryForObject(SQL_FIND.replaceAll("ident from marks", SQL_JOIN), new MarkMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new ResourceNotFoundException("Mark with id " + id + " not found",e);
         }
     }
 
@@ -68,9 +67,4 @@ public class MarkDAO {
         log.info(SQL_DELETE);
         return jdbcTemplate.update(SQL_DELETE, mark.getId()) > 0;
     }
-
-    public boolean canBeDeleted(long id) {
-        return true;
-    }
-
 }

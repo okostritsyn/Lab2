@@ -1,6 +1,5 @@
 package nc.apps.controllers.web;
 
-import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.model.Student;
 import nc.apps.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,13 @@ public class StudentController {
     @GetMapping(path = "/new")
     public ModelAndView add() {
         Student student = new Student();
+        //student.setId(0L);
         return new ModelAndView("edit_student", "student", student);
     }
 
     @GetMapping(path = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Student student = studentService.get(Long.parseLong(idPath));
-       if (student == null) {
-           throw new ResourceNotFoundException("Student with id "+idPath+" not found");
-        }
        return new ModelAndView("edit_student", "student", student);
     }
 

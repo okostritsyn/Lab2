@@ -1,6 +1,5 @@
 package nc.apps.controllers.web;
 
-import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.model.Group;
 import nc.apps.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,6 @@ public class GroupController {
     @GetMapping(path = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Group group = groupService.get(Long.parseLong(idPath));
-
-        if (group == null) throw new ResourceNotFoundException("Group with id "+idPath+" not found");
-
         return new ModelAndView("edit_group", "group",group);
     }
-
 }

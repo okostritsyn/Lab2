@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import nc.apps.errors.AppError;
 import nc.apps.model.Mark;
 import nc.apps.service.MarkService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,10 +32,8 @@ public class MarkRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable int id) {
-        if (markService.canBeDeleted((long) id)){
-            if(markService.delete((long) id)){
-                return ResponseEntity.ok().build();
-            }
+        if(markService.delete((long) id)){
+            return ResponseEntity.ok().build();
         }
         log.error("Error while deleting mark with id "+id);
         return new ResponseEntity(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -47,8 +44,7 @@ public class MarkRestController {
     @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity save(@RequestBody Mark mark) {
-        boolean status = markService.save(mark);
-        if(status){
+        if(markService.save(mark)){
             return ResponseEntity.ok().build();
         }
         log.error("Error while saving mark with id "+mark.getId());

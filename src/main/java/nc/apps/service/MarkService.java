@@ -34,8 +34,4 @@ public class MarkService {
     public boolean delete(Long id) {
         return markDAO.delete(markDAO.findById(id));
     }
-
-    public boolean canBeDeleted(Long id) {
-        return markDAO.canBeDeleted(id);
-    }
 }

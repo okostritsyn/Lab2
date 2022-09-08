@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import nc.apps.errors.AppError;
 import nc.apps.model.Specialization;
 import nc.apps.service.SpecService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,8 +46,7 @@ public class SpecRestController {
     @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity save(@RequestBody Specialization spec) {
-        boolean status = specService.save(spec);
-        if(status){
+        if(specService.save(spec)){
             return ResponseEntity.ok().build();
         }
         log.error("Error while saving spec with id "+spec.getId());

@@ -1,16 +1,12 @@
 package nc.apps.controllers.web;
 
-import nc.apps.errors.ResourceNotFoundException;
-import nc.apps.model.Student;
 import nc.apps.model.Subject;
-import nc.apps.service.StudentService;
 import nc.apps.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -33,9 +29,6 @@ public class SubjectController {
     @GetMapping(path = "/edit/{id}")
     public ModelAndView edit(@PathVariable(value = "id") String idPath) {
         Subject subject = subjectService.get(Long.parseLong(idPath));
-       if (subject == null) {
-           throw new ResourceNotFoundException("Subject with id "+idPath+" not found");
-        }
        return new ModelAndView("edit_subject", "subject", subject);
     }
 

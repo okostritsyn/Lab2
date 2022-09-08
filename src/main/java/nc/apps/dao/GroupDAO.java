@@ -1,10 +1,9 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
-import nc.apps.controllers.rest.GroupRestController;
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.mapper.GroupMapper;
 import nc.apps.model.Group;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,7 +59,7 @@ public class GroupDAO {
             log.info(SQL_FIND_GROUP.replaceAll("ident from groups", SQL_JOIN_GROUP));
             return jdbcTemplate.queryForObject(SQL_FIND_GROUP.replaceAll("ident from groups", SQL_JOIN_GROUP), new GroupMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new ResourceNotFoundException("Group with id " + id + " not found",e);
         }
     }
 

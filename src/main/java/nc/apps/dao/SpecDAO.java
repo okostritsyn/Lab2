@@ -1,10 +1,8 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
-import nc.apps.mapper.GroupMapper;
-import nc.apps.mapper.MarkMapper;
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.mapper.SpecMapper;
-import nc.apps.model.Group;
 import nc.apps.model.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -66,7 +64,7 @@ public class SpecDAO {
         try {
             return jdbcTemplate.queryForObject(SQL_FIND.replaceAll("ident from specializations", SQL_JOIN), new SpecMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new ResourceNotFoundException("Mark with id " + id + " not found",e);
         }
     }
 

@@ -1,9 +1,8 @@
 package nc.apps.dao;
 
 import lombok.extern.log4j.Log4j;
-import nc.apps.mapper.GroupMapper;
+import nc.apps.errors.ResourceNotFoundException;
 import nc.apps.mapper.StudentMapper;
-import nc.apps.model.Group;
 import nc.apps.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -64,7 +63,7 @@ public class StudentDAO {
         try {
             return jdbcTemplate.queryForObject(SQL_FIND_STUDENT.replaceAll("ident from students",SQL_JOIN_GROUP),  new StudentMapper(), id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new ResourceNotFoundException("Student with id " + id + " not found",e);
         }
     }
 

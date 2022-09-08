@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import nc.apps.errors.AppError;
 import nc.apps.model.Student;
 import nc.apps.service.StudentService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,8 +46,7 @@ public class StudentRestController {
     @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity save(@RequestBody Student student) {
-        boolean status = studentService.save(student);
-        if(status){
+        if(studentService.save(student)){
             return ResponseEntity.ok().build();
         }
         log.error("Error while saving student with id "+student.getId());

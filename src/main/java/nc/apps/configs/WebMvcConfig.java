@@ -1,8 +1,6 @@
 package nc.apps.configs;
 
 import lombok.extern.log4j.Log4j;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.*;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,6 +17,7 @@ import javax.sql.DataSource;
 public class WebMvcConfig implements WebMvcConfigurer {
     //@Autowired
     //private Environment environment;
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -37,19 +36,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public DataSource dataSource() {
-/*
+    /*
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-*/
+    */
         DataSource dataSource = null;
         JndiTemplate jndi = new JndiTemplate();
         try {
             dataSource = jndi.lookup("java:comp/env/jdbc/Lab2JNDI", DataSource.class);
         } catch (NamingException e) {
-            //log.error("NamingException for java:comp/env/jdbc/Lab2JNDI", e);
+            log.error("NamingException for java:comp/env/jdbc/Lab2JNDI", e);
         }
 
         return dataSource;

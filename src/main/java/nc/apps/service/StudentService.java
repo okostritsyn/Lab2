@@ -29,11 +29,7 @@ public class StudentService {
     }
 
     public Student get(Long id) {
-        Student currStudent = studentDAO.findById(id);
-        if (currStudent == null){
-            throw new ResourceNotFoundException("Student with id " + id + " not found");
-        }
-        return currStudent;
+        return studentDAO.findById(id);
     }
 
     public boolean delete(Long id) {
