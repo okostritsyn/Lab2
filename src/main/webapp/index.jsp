@@ -53,10 +53,6 @@
 <table id="newsList">
 
 </table>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-
 <script>
   function searchByName() {
     var name = document.getElementById("search_field").value;
@@ -156,7 +152,7 @@
         console.log('err', this.responseText)
       }
     };
-    xhttp.open("POST", "http://localhost:8081/top",true);
+    xhttp.open("POST", "http://192.168.99.102:8081/top",true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(JSON.stringify([{ "country": "ua"},{ "country": "us"}]));
   }
@@ -216,13 +212,13 @@
       }
 
       if (this.status == 200) {
-        window.open("http://localhost:8081/files/"+this.responseText, '_blank').focus();
+        window.open("http://192.168.99.102:8081/files/"+this.responseText, '_blank').focus();
       } else {
         alert(this.status);
         console.log('err', this.responseText)
       }
     };
-    xhttp.open("POST", "http://localhost:8081/getfile",true);
+    xhttp.open("POST", "http://192.168.99.102:8081/getfile",true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(articleJson);
   }

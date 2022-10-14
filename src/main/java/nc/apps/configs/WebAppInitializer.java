@@ -15,7 +15,6 @@ public class WebAppInitializer implements WebApplicationInitializer  {
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.register(WebMvcConfig.class);
         appContext.setServletContext(servletContext);
-
         appContext.scan("nc.apps");
         servletContext.addListener(new ContextLoaderListener(appContext));
 
@@ -26,4 +25,5 @@ public class WebAppInitializer implements WebApplicationInitializer  {
         dispatcher.addMapping("/");
         dispatcher.setInitParameter("contextClass", appContext.getClass().getName());
       }
+
 }

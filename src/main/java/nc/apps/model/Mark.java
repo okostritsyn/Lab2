@@ -1,7 +1,6 @@
 package nc.apps.model;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data

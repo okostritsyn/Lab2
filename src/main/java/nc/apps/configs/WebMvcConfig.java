@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @ComponentScan(value = "nc.apps")
 @Log4j
+//@PropertySource("classpath:database.properties")
 public class WebMvcConfig implements WebMvcConfigurer {
     //@Autowired
     //private Environment environment;
@@ -36,13 +37,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public DataSource dataSource() {
-    /*
+/*
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-    */
+*/
         DataSource dataSource = null;
         JndiTemplate jndi = new JndiTemplate();
         try {

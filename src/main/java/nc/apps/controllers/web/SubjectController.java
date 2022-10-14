@@ -23,6 +23,7 @@ public class SubjectController {
     @GetMapping(path = "/new")
     public ModelAndView add() {
         Subject subject = new Subject();
+        subject.setId(0L);
         return new ModelAndView("edit_subject", "subject", subject);
     }
 

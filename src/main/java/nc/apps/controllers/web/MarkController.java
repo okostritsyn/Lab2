@@ -24,7 +24,7 @@ public class MarkController {
         return new ModelAndView("view_marks","student", studentService.get(Long.parseLong(studentId)));
     }
 
-    @GetMapping(path = "/new")
+    @GetMapping(path = "/new/{id}")
     public ModelAndView add(@PathVariable(value = "studentId") String studentId) {
         Mark mark = new Mark();
         mark.setStudentId(Long.parseLong(studentId));
