@@ -23,7 +23,7 @@
     }
   </style>
 </head>
-<body onload="loadStudents();">
+<body onload="loadStudents(); loadNews();">
 
 <h2>Students table</h2>
 
@@ -48,13 +48,25 @@
   <p><a href="web/students/new">Add student</a></p>
 </div>
 
+<h2>Top news</h2>
+
+<table id="newsList">
+
+</table>
 <script>
   function searchByName() {
     var name = document.getElementById("search_field").value;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
         showStudentsFromJSON(this.responseText);
+      } else {
+        alert(this.responseText);
+        console.log('err', this.responseText)
       }
     };
     xhttp.open("GET", "http://localhost:8080/api/students/findByName?name=" + name, true);
@@ -98,6 +110,7 @@
       if (this.status == 200) {
         loadStudents();
       } else {
+        alert(this.responseText);
         console.log('err', this.responseText)
       }
     };
@@ -108,12 +121,133 @@
   function loadStudents() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
         showStudentsFromJSON(this.responseText);
+      } else {
+        alert(this.responseText);
+        console.log('err', this.responseText)
       }
     };
     xhttp.open("GET", "http://localhost:8080/api/students/findAll", true);
     xhttp.send();
+  }
+
+  function loadNews() {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange  = function () {
+
+      if (this.readyState != 4) {
+        return;
+      }
+
+      var html = '<tr>\n' +
+              '        <th>Country</th>\n' +
+              '        <th>Author</th>\n' +
+              '        <th>Title</th>\n' +
+              '        <th>Description</th>\n' +
+              '        <th>Date</th>\n' +
+              '        <th> </th>\n' +
+              '    </tr>';
+      if (this.status == 200) {
+        showNewsFromJSON(this.responseText);
+      }else if (this.status == 0) {
+        html = html + '<tr><td></td>\n' +
+                '        <td>We have an error while getting news</td>\n' +
+                '        <td>Error #' + this.status + '</td>\n' +
+                '        <td>' + "Connection refused. Service is not available?" + '</td>\n' +
+                '        <td></td>' +
+                '        <td></td></tr>';
+        document.getElementById("newsList").innerHTML = html;
+        console.log('err', "status = 0,Service is not available")
+      } else {
+        html = html + '<tr><td></td>\n' +
+                '        <td>We have an error while getting news</td>\n' +
+                '        <td>Error #' + this.status + '</td>\n' +
+                '        <td>' +this.responseText+ '</td>\n' +
+                '        <td></td>' +
+                '        <td></td></tr>';
+        document.getElementById("newsList").innerHTML = html;
+        console.log('err', this.responseText)
+        }
+    };
+    xhttp.open("POST", "http://localhost:8081/top",true);
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.send(JSON.stringify([{ "country": "ua"},{ "country": "us"}]));
+  }
+
+  function showNewsFromJSON(responseText){
+    var response = JSON.parse(responseText);
+    var html = '<tr>\n' +
+            '        <th>Country</th>\n' +
+            '        <th>Author</th>\n' +
+            '        <th>Title</th>\n' +
+            '        <th>Description</th>\n' +
+            '        <th>Date</th>\n' +
+            '        <th> </th>\n' +
+            '    </tr>';
+
+    for (var j = 0; j < response.length; j++){
+      var currresponse = response[j];
+      responseCode = currresponse.statusCode;
+      html = html + '<tr><td>'+currresponse.request.paramFields.country+'</td>\n' +
+              '        <td></td>\n' +
+              '        <td></td>\n' +
+              '        <td></td>\n' +
+              '        <td></td>' +
+              '        <td></td></tr>';
+
+      if (responseCode != 200) {
+        html = html + '<tr><td></td>\n' +
+                '        <td>We have an error while getting news</td>\n' +
+                '        <td>Error #' + responseCode + '</td>\n' +
+                '        <td>' + currresponse.data.message + '</td>\n' +
+                '        <td></td>' +
+                '        <td></td></tr>';
+        console.log('err', currresponse.data.message);
+      } else {
+        for (var i = 0; i < currresponse.data.articles.length; i++) {
+          var article = currresponse.data.articles[i];
+          html = html + '<tr><td></td>\n' +
+                  '        <td>' + article.author + '</td>\n' +
+                  '        <td>' + article.title + '</td>\n' +
+                  '        <td>' + article.description + '</td>\n' +
+                  '        <td>' + article.publishedAt + '</td>' +
+                  '        <td><button onclick="openArticle(&quot;' + article.url + '&quot;)">Open</button><button onclick="saveArticle(&quot;' + encodeURI(JSON.stringify(article)) + '&quot;)">Save</button></td></tr>';
+
+        }
+      }
+    }
+    document.getElementById("newsList").innerHTML = html;
+  }
+
+  function saveArticle(articleString) {
+    articleJson = decodeURI(articleString);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange  = function () {
+
+      if (this.readyState != 4) {
+        return;
+      }
+
+      if (this.status == 200) {
+        window.open("http://localhost:8081/files/"+this.responseText, '_blank').focus();
+      } else {
+        alert(this.status);
+        console.log('err', this.responseText)
+      }
+    };
+    xhttp.open("POST", "http://localhost:8081/getfile",true);
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.send(articleJson);
+  }
+
+  function openArticle(urlArticle) {
+    window.open(urlArticle, '_blank').focus();
   }
 </script>
 </body>

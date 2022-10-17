@@ -33,7 +33,7 @@
                 <td><input type="text" id="subject_name" placeholder="Name" value="<c:out value="${subject.name}"/>"></td>
             </tr>
             <tr>
-                <td colspan="2"><input type="submit" onclick="saveSubject()" value="Save"></td>
+                <td colspan="2"><input type="button" onclick="saveSubject()" value="Save"></td>
             </tr>
         </table>
     </form:form>
@@ -53,6 +53,7 @@
             if (this.status == 200) {
 
             } else {
+                alert(this.responseText);
                 console.log('err', this.responseText)
             }
         };
@@ -60,7 +61,6 @@
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(JSON.stringify({id: subjectId,name: subjectName}));
         window.history.back();
-
     }
 </script>
 </body>

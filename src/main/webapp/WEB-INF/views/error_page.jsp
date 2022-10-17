@@ -15,6 +15,13 @@
 <body>
 <h1>Error Page</h1>
 <p>Application has encountered an error. Please contact support on ...</p>
+
+<p>Error code: <c:out value="${code}"/> </p>
+<p>reason: <c:out value="${reason}"/> </p>
+<p>Error message: <c:out value="${message}"/> </p>
+<p>Cause: <c:out value="${cause}"/> </p>
+<p>
+    More information: </p>
 <div>
     <p><c:out value="${url}"/></p>
     <c:forEach var="ste" items="${exception.stackTrace}">

@@ -75,7 +75,8 @@
       if (this.status == 200) {
         loadList();
       } else {
-        console.log('err', this.responseText)
+          alert(this.responseText);
+          console.log('err', this.responseText)
       }
     };
     xhttp.open("DELETE", "http://localhost:8080/api/marks/delete/" + objId, true);
@@ -86,9 +87,16 @@
     var stId = <c:out value="${student.id}"/>;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        showListFromJSON(this.responseText);
-      }
+        if (this.readyState != 4) {
+            return;
+        }
+
+        if (this.status == 200) {
+            showListFromJSON(this.responseText);
+        } else {
+            alert(this.responseText);
+            console.log('err', this.responseText)
+        }
     };
     xhttp.open("GET", "http://localhost:8080/api/marks/findByStudent/"+stId, true);
     xhttp.send();
