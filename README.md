@@ -1,6 +1,6 @@
 # Student`s database
 ## Description ## 
-A spring mvc application for student`s marks tracking
+A spring mvc application for student`s marks tracking.
 With the help of a Web application work with data is carried out: display, creation, modification, and deletion. 
 JSP pages are used to display objects based on the received parameters
  
