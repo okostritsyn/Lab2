@@ -15,7 +15,7 @@ public class WebAppInitializer implements WebApplicationInitializer  {
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.register(WebMvcConfig.class);
         appContext.setServletContext(servletContext);
-        appContext.scan("nc.apps");
+        appContext.scan("ok.apps");
         servletContext.addListener(new ContextLoaderListener(appContext));
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
