@@ -138,21 +138,44 @@
 
   function loadNews() {
     var xhttp = new XMLHttpRequest();
+
     xhttp.onreadystatechange  = function () {
 
       if (this.readyState != 4) {
         return;
       }
 
+      var html = '<tr>\n' +
+              '        <th>Country</th>\n' +
+              '        <th>Author</th>\n' +
+              '        <th>Title</th>\n' +
+              '        <th>Description</th>\n' +
+              '        <th>Date</th>\n' +
+              '        <th> </th>\n' +
+              '    </tr>';
       if (this.status == 200) {
         showNewsFromJSON(this.responseText);
+      }else if (this.status == 0) {
+        html = html + '<tr><td></td>\n' +
+                '        <td>We have an error while getting news</td>\n' +
+                '        <td>Error #' + this.status + '</td>\n' +
+                '        <td>' + "Connection refused. Service is not available?" + '</td>\n' +
+                '        <td></td>' +
+                '        <td></td></tr>';
+        document.getElementById("newsList").innerHTML = html;
+        console.log('err', "status = 0,Service is not available")
       } else {
-        alert(this.status);
-        alert(this.responseText);
+        html = html + '<tr><td></td>\n' +
+                '        <td>We have an error while getting news</td>\n' +
+                '        <td>Error #' + this.status + '</td>\n' +
+                '        <td>' +this.responseText+ '</td>\n' +
+                '        <td></td>' +
+                '        <td></td></tr>';
+        document.getElementById("newsList").innerHTML = html;
         console.log('err', this.responseText)
-      }
+        }
     };
-    xhttp.open("POST", "http://192.168.99.102:8081/top",true);
+    xhttp.open("POST", "http://localhost:8081/top",true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(JSON.stringify([{ "country": "ua"},{ "country": "us"}]));
   }
@@ -212,13 +235,13 @@
       }
 
       if (this.status == 200) {
-        window.open("http://192.168.99.102:8081/files/"+this.responseText, '_blank').focus();
+        window.open("http://localhost:8081/files/"+this.responseText, '_blank').focus();
       } else {
         alert(this.status);
         console.log('err', this.responseText)
       }
     };
-    xhttp.open("POST", "http://192.168.99.102:8081/getfile",true);
+    xhttp.open("POST", "http://localhost:8081/getfile",true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(articleJson);
   }

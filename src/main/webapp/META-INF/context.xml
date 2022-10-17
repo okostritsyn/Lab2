@@ -2,7 +2,7 @@
 <Context>
     <Resource name="jdbc/StudentsDBJNDI" auth="Container" type="javax.sql.DataSource"
               username="postgres" password="postgresql"
-              url="jdbc:postgresql://192.168.99.102:5432/lab2"
+              url="jdbc:postgresql://localhost:5432/studentdb"
               driverClassName="org.postgresql.Driver"
               initialSize="5"
               maxActive="8" maxIdle="5"
